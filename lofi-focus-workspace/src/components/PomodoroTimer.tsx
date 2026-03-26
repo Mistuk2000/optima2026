@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 
 export default function PomodoroTimer() {
-  const [minutes, setMinutes] = useState(25);
-  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(25);
   const [isActive, setIsActive] = useState(false);
   const [sessions, setSessions] = useState(0);
   const [mode, setMode] = useState<'work' | 'break'>('work');
@@ -45,10 +45,12 @@ export default function PomodoroTimer() {
     if (mode === 'work') {
       setSessions(s => s + 1);
       setMode('break');
-      setMinutes(5);
+      setMinutes(0);
+      setSeconds(5);
     } else {
       setMode('work');
-      setMinutes(25);
+      setMinutes(0);
+      setSeconds(25);
     }
   };
 
@@ -57,13 +59,13 @@ export default function PomodoroTimer() {
   const resetTimer = () => {
     setIsActive(false);
     setMode('work');
-    setMinutes(25);
-    setSeconds(0);
+    setMinutes(0);
+    setSeconds(25);
   };
 
   const progress = mode === 'work' 
-    ? ((25 * 60 - (minutes * 60 + seconds)) / (25 * 60)) * 100
-    : ((5 * 60 - (minutes * 60 + seconds)) / (5 * 60)) * 100;
+    ? ((25 - (minutes * 60 + seconds)) / 25) * 100
+    : ((5 - (minutes * 60 + seconds)) / 5) * 100;
 
   return (
     <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800 rounded-3xl p-8 flex flex-col items-center justify-center space-y-6 shadow-2xl">
